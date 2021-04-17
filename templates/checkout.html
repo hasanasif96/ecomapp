@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout {% endblock %}
+
+{% block content %}
+
+<style>
+span.price {
+  float: right;
+  color: grey;
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="column" style="background-color: #f2f2f2;">
+            <h3>Items in the cart</h3>
+            <a href="{% url 'ecomapp:mycart' %}">Update Cart</a>
+            
+              <h4>Cart <span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b>{{cart.cartproduct_set.all|length }}</b></span></h4>
+              {% for cp in cart.cartproduct_set.all %}
+                  <p><a href="#">{{cp.product.title}}</a> <span class="price">{{cp.subtotal}}</span></p>
+              {% endfor %}
+                   <hr>
+                  <p>Total <span class="price" style="color:black"><b>Rs. {{cart.total}}</b></span></p>
+        </div>
+             
+            
+            
+        <div class="column" style="background-color: #f2f2f2;">
+            <h3>Checkout Form</h3>
+            <div class="form-group">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <button class="btn btn-info">Place order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
