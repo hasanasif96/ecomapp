@@ -31,12 +31,7 @@ class cartnum(object):
             cart = None
         context['cart'] = cart
         return context
-
-class homee(object):    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['all_products'] = Product.objects.all()
-        return context    
+   
 
 class HomeView(cartnum,EcomMixin, TemplateView):
     template_name= "home.html"
@@ -75,8 +70,8 @@ class ProductDetailView(cartnum,EcomMixin, TemplateView):
     
     
 
-class AddToCartView(homee,cartnum, EcomMixin, TemplateView):
-    template_name = "home.html"
+class AddToCartView(EcomMixin, TemplateView):
+    template_name = "addtocart.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
