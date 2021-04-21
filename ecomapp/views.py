@@ -34,7 +34,7 @@ class cartnum(object):
         return context
    
 
-class HomeView(cartnum,EcomMixin, TemplateView):
+class HomeView(EcomMixin, cartnum, TemplateView):
     template_name= "home.html"
     
     def get_context_data(self, **kwargs):
