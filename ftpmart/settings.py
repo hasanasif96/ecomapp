@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'bh38y214ee3rh8k11re^-i%23)2%q#(^m0kc%&2^h2=m5=^xv('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["citymart.herokuapp.com",]
 
