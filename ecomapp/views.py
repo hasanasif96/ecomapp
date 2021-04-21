@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, CreateView,FormView, DetailView, ListView
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
+from .utils import password_reset_token
 from django.db.models import Q
 from django.conf import settings
 from django.core.mail import send_mail
@@ -300,7 +301,32 @@ class SearchView(TemplateView):
         context["results"] = results
         return context
 
-
+class PasswordForgotView(FormView):
+    template_name = "forgotpassword.html"
+    form_class = PasswordForgotForm
+    success_url = "/forgot-password/?m=s"
+    
+    def form_valid(self, form):
+        # get email from user
+        email = form.cleaned_data.get("email")
+        # get current host ip/domain
+        url = self.request.META['HTTP_HOST']
+        # get customer and then user
+        customer = Customer.objects.filter(user__email=email)[0]
+        print(customer)
+        user = customer.user
+        text_content = 'Please Click the link below to reset your password. '
+        html_content = url + "/password-reset/" + email + \
+                "/" + password_reset_token.make_token(user) + "/"
+    
+        send_mail(
+                'Password Reset Link | Django Ecommerce',
+                text_content + html_content,
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
+            )
+        return super().form_valid(form)
 #aadmin
         
 class AdminLoginView(FormView):
