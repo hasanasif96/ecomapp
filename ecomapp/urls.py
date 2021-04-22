@@ -20,6 +20,7 @@ urlpatterns=[
         path("profile/order-<int:pk>/", CustomerOrderDetailView.as_view(), name="customerorderdetail"),
         path("search/", SearchView.as_view(), name="search"),
         path("forgot-password/", PasswordForgotView.as_view(), name="passworforgot"),
+        path("orderplace/", OrderplacedView.as_view(), name="orderplaced"),
         
         
         path("admin-login/", AdminLoginView.as_view(), name="adminlogin"),
