@@ -184,7 +184,8 @@ class CheckoutView(EcomMixin, CreateView):
             cart_obj = None
         context['cart'] = cart_obj
         return context
-
+    
+    
     def form_valid(self, form):
         cart_id = self.request.session.get("cart_id")
         if cart_id:
@@ -193,16 +194,34 @@ class CheckoutView(EcomMixin, CreateView):
             form.instance.subtotal = cart_obj.total
             form.instance.discount = 0
             form.instance.total = cart_obj.total
+            #print(form['email'].value())
             form.instance.order_status = "Order Received"
             subject = 'Order Placed'
             message = f'Hi, thank you for placing an order.'
             email_from = settings.EMAIL_HOST_USER
-            recipient_list = [self.request.user.email, ]
+            recipient_list = [form['email'].value(), ]
             send_mail( subject, message, email_from, recipient_list )
             del self.request.session['cart_id']
         else:
             return redirect("ecomapp:home")
         return super().form_valid(form)
+
+  
+
+class OrderplacedView(cartnum,TemplateView):
+    template_name = "orderdone.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        customer = self.request.user.customer
+        context['customer'] = customer
+        orders = Order.objects.filter(cart__customer=customer).order_by("-id")[0]
+        #order_id=orders.id
+        cart_pro = CartProduct.objects.get(id=orders.cart.id)
+        cat=Cart.objects.get(id=orders.cart.id)
+        context["cart_pros"] = cat
+        context["orders"] = orders
+        return context
     
     
 class CustomerRegistrationView(CreateView):
