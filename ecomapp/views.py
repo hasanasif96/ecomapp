@@ -165,7 +165,7 @@ class ManageCartView(EcomMixin, View):
 class CheckoutView(EcomMixin, CreateView):
     template_name = "checkout.html"
     form_class = CheckoutForm
-    success_url = reverse_lazy("ecomapp:home")
+    success_url = reverse_lazy("ecomapp:orderplaced")
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user.customer:
