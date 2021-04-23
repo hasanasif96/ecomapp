@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, CreateView,FormView, DetailView, ListView
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .utils import password_reset_token
 from django.db.models import Q
 from django.conf import settings
@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from .models import *
 from django.urls import reverse_lazy, reverse
 from .forms import *
+from django.contrib import messages
 # Create your views here.
 
 
@@ -71,11 +72,12 @@ class ProductDetailView(cartnum,EcomMixin, TemplateView):
     
     
 
-class AddToCartView(EcomMixin, TemplateView):
-    template_name = "addtocart.html"
+class AddToCartView(cartnum,EcomMixin, View):
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    #def get_context_data(self,request, *args, **kwargs):
+    #    context = super().get_context_data(**kwargs)
+    def get(self, request, *args, **kwargs):
+        print(request.get_full_path)
         # get product id from requested url
         product_id = self.kwargs['pro_id']
         # get product
@@ -102,6 +104,8 @@ class AddToCartView(EcomMixin, TemplateView):
                     cart=cart_obj, product=product_obj, rate=product_obj.selling_price, quantity=1, subtotal=product_obj.selling_price)
                 cart_obj.total += product_obj.selling_price
                 cart_obj.save()
+                
+
 
         else:
             cart_obj = Cart.objects.create(total=0)
@@ -110,8 +114,8 @@ class AddToCartView(EcomMixin, TemplateView):
                 cart=cart_obj, product=product_obj, rate=product_obj.selling_price, quantity=1, subtotal=product_obj.selling_price)
             cart_obj.total += product_obj.selling_price
             cart_obj.save()
-
-        return context
+        messages.success(request, 'Product added to the cart')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 
