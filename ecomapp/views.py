@@ -296,6 +296,11 @@ class CustomerProfileView(cartnum,TemplateView):
         return context
 
     
+ORDER_STATUS2 = (
+    ("Order Cancelled", "Cancel Order"),
+    ("Return Requested","Request Return"),
+    
+)   
 class CustomerOrderDetailView(cartnum, DetailView):
     template_name = "customerorderdetail.html"
     model = Order
@@ -310,6 +315,19 @@ class CustomerOrderDetailView(cartnum, DetailView):
         else:
             return redirect("/login/?next=/profile/")
         return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["allstatus"] = ORDER_STATUS2
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        order_id = self.kwargs["pk"]
+        order_obj = Order.objects.get(id=order_id)
+        new_status = request.POST.get("status")
+        order_obj.order_status = new_status
+        order_obj.save()
+        return redirect(reverse_lazy("ecomapp:customerorderdetail", kwargs={"pk": order_id}))
 
 
 class SearchView(TemplateView):
