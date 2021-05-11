@@ -26,11 +26,7 @@ class Migration(migrations.Migration):
             name='order_status',
             field=models.CharField(choices=[('Order Received', 'Order Received'), ('Order Processing', 'Order Processing'), ('On the way', 'On the way'), ('Order Completed', 'Order Completed'), ('Order Cancelled', 'Cancel Order'), ('Return Requested', 'Request Return')], max_length=50),
         ),
-        migrations.AlterField(
-            model_name='product',
-            name='marked_price',
-            field=models.PositiveIntegerField(blank=True, null=True),
-        ),
+        
         
         migrations.AddField(
             model_name='product',
