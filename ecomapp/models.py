@@ -23,12 +23,23 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Sellermain(models.Model):
+    seller_name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
+    joined_on = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.seller_name 
 
 class Product(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    seler = models.ForeignKey(Sellermain, on_delete=models.CASCADE, null=True, blank=True)
+    brand = models.CharField(max_length=200)
+    quantity = models.CharField(max_length=200)
     image = models.ImageField(upload_to="products")
     marked_price = models.PositiveIntegerField()
     selling_price = models.PositiveIntegerField()
