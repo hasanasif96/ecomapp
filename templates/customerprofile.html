@@ -1,44 +1,34 @@
-{% extends 'base.html' %}
 
+{% extends 'base.html' %}
 {% block title %}My Profile{% endblock %}
 
+
+
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <h3>Detail Information</h3><hr>
-            <p><span class="font-weight-bold">Name: </span> {{customer.full_name}}</p>
-            <p><span class="font-weight-bold">Username: </span> {{customer.user.username}}</p>
-            <p><span class="font-weight-bold">Email: </span> {{customer.user.email}}</p>
-            <p><span class="font-weight-bold">Address: </span> {{customer.address}}</p>
-            <p><span class="font-weight-bold">Joined on: </span> {{customer.joined_on}}</p>
-        </div>
-        <div class="col-md-8">
-            <h3>Previous Orders</h3>
-            <hr>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Order ID</th>
-                        <th>Amount</th>
-                        <th>Ordered on</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for ord in orders %}
-                    <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td><a href="{% url 'ecomapp:customerorderdetail' ord.pk %}">#ORDER_{{ord.id}}</a></td>
-                        <td>{{ord.total}}</td>
-                        <td>{{ord.created_at|timesince}} ago</td>
-                        <td>{{ord.order_status}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+
+
+
+<div class="card text-center">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="true" href="{% url 'ecomapp:customerprofile'  %}">My Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'ecomapp:customerorder'  %}">My Orders</a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+    <h2 class="card-title">Detail Information</h2>
+    <p><span class="font-weight-bold">Name: </span> {{customer.full_name}}</p>
+    <p><span class="font-weight-bold">Username: </span> {{customer.user.username}}</p>
+    <p><span class="font-weight-bold">Email: </span> {{customer.user.email}}</p>
+    <p><span class="font-weight-bold">Address: </span> {{customer.address}}</p>
+    <p><span class="font-weight-bold">Joined on: </span> {{customer.joined_on}}</p>
+    <a href="#" class="btn btn-primary">Edit Profile</a>
+  </div>
 </div>
+
+
 {% endblock %}
