@@ -7,13 +7,10 @@
     .errorlist {
         color: red;
     }
-    .container{
-    float:right;
-    }
 </style>
 <div class="container">
     <div class="row">
-        <div class="col-md-4 mx-auto">
+        <div class="col-md-6 mx-auto">
             <h3>Customer Login Form</h3>
             <hr>
             <form action="" method="POST">
@@ -21,11 +18,11 @@
                 {{form.as_p}}
                 <button class="btn btn-primary">Login as a Customer</button>
                 {% if error %}
-                <li  class="alert alert-warning" style="color: red;">{{error}}</li>
+                <li style="color: red;">{{error}}</li>
                 {% endif %}
             </form>
             <p>Forgot Password?<a href="{% url 'ecomapp:passworforgot' %}">Reset now.</a></p>
-            <p> or dont have account? <a href="/register">Register here</a></p>
+            <p> or dont have account? <a href="{% url 'ecomapp:customerregistration' %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}">Register here</a></p>
         </div>
     </div>
 </div>
