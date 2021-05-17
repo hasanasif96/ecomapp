@@ -37,7 +37,7 @@ class Product(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    seler = models.ForeignKey(Sellermain, on_delete=models.CASCADE, null=True, blank=True)
+    seler = models.ForeignKey(Sellermain, on_delete=models.CASCADE)
     brand = models.CharField(max_length=200)
     quantity = models.CharField(max_length=200)
     image = models.ImageField(upload_to="products")
