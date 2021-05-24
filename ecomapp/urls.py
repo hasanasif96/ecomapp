@@ -37,6 +37,20 @@ urlpatterns=[
          name="adminproductlist"),
         path("admin-product/add/", AdminProductCreateView.as_view(),
          name="adminproductcreate"),
+        
+        
+        
+        
+        
+        
+        path("Delivery-login/", DeliveryLoginView.as_view(), name="Deliverylogin"),     
+        path("delivery-all-orders/", DeliveryOrderListView.as_view(), name="DeliveryOrderList"),   
+        path("delivery-order/<int:pk>/", DeliveryOrderDetailView.as_view(), name="DeliveryOrderDetail"),
+        path("Deliverymanage/<int:dk>/", Deliverymanageview.as_view(), name="Deliverymanage"),
+        path("pendingdelivery/", Currentdelivery.as_view(), name="Currentdelivery"),
+        path("pending-delivery-order/<int:pk>/", pendingDeliveryOrderDetailView.as_view(), name="pendingDeliveryOrderDetail"),
+        path("pending-order-<int:pk>-change/", pendingDeliveryOrderStatuChangeView.as_view(), name="pendingDeliveryOrderStatuChange"),
+             
 
 
 ]
