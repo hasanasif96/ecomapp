@@ -455,3 +455,94 @@ class AdminProductCreateView(AdminRequiredMixin, CreateView):
             ProductImage.objects.create(product=p, image=i)
         return super().form_valid(form)
 
+    
+    
+   #Delivery backend
+    
+    
+class DeliveryLoginView(FormView):
+    template_name = "Deliverylogin.html"
+    form_class = CustomerLoginForm
+    success_url = reverse_lazy("ecomapp:DeliveryOrderList")
+
+    def form_valid(self, form):
+        uname = form.cleaned_data.get("username")
+        pword = form.cleaned_data["password"]
+        usr = authenticate(username=uname, password=pword)
+        if usr is not None and Delivery.objects.filter(user=usr).exists():
+            login(self.request, usr)
+        else:
+            return render(self.request, self.template_name, {"form": self.form_class, "error": "Invalid credentials"})
+        return super().form_valid(form)
+    
+
+    
+    
+class DeliveryRequiredMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and Delivery.objects.filter(user=request.user).exists():
+            pass
+        else:
+            return redirect("/Delivery-login/")
+        return super().dispatch(request, *args, **kwargs)
+
+class DeliveryOrderListView(DeliveryRequiredMixin, ListView):
+    template_name = "deliveryallorder.html"
+    queryset = Order.objects.filter(agent ="No one assigned").order_by("-id")
+    context_object_name = "allorders"
+    
+    
+class Currentdelivery(DeliveryRequiredMixin, TemplateView):
+    template_name = "Currentdelivery.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        name=self.request.user
+        context["pendingorders"] = Order.objects.filter(agent=name).order_by("-id")
+        return context
+
+
+class pendingDeliveryOrderDetailView(DeliveryRequiredMixin, DetailView):
+    template_name = "pendingdeliveryorderdetail.html"
+    model = Order
+    context_object_name = "ord_obj"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["allstatus"] = ORDER_STATUS
+        return context
+    
+class pendingDeliveryOrderStatuChangeView(DeliveryRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        order_id = self.kwargs["pk"]
+        order_obj = Order.objects.get(id=order_id)
+        new_status = request.POST.get("status")
+        order_obj.order_status = new_status
+        order_obj.save()
+        return redirect(reverse_lazy("ecomapp:pendingDeliveryOrderDetail", kwargs={"pk": order_id}))
+    
+    
+class DeliveryOrderDetailView(DeliveryRequiredMixin,DetailView):
+    template_name = "deliveryorderdetail.html"
+    model = Order
+    context_object_name = "ord_obj"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["allstatus"] = ORDER_STATUS
+        return context
+    
+    
+class Deliverymanageview(DeliveryRequiredMixin,View):
+    def get(self, request, *args, **kwargs):
+        r_id = self.kwargs["dk"]
+        action = request.GET.get("action")
+        agents=self.request.user
+        request_obj = Order.objects.get(id=r_id)
+
+        if action == "acc":
+            request_obj.agent = str(agents)
+            request_obj.save()
+        else:
+            pass
+        return redirect("ecomapp:DeliveryOrderList")
