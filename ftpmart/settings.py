@@ -123,12 +123,41 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+#STATIC_URL = '/static/'
+#STATICFILES_DIRS=[BASE_DIR / "static"]
+#STATIC_ROOT= BASE_DIR / "static_cdb"
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#MEDIA_URL="/media/"
+#MEDIA_ROOT= BASE_DIR / "media"
+
+
+#AWS connection
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS=[BASE_DIR / "static"]
-STATIC_ROOT= BASE_DIR / "static_cdb"
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATIC_ROOT= BASE_DIR / "static_cdb"
 MEDIA_URL="/media/"
-MEDIA_ROOT= BASE_DIR / "media"
+#MEDIA_ROOT= BASE_DIR / "media"
+ 
+AWS_ACCESS_KEY_ID = "AKIAVOZJVOVZNF64QZEL"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_STORAGE_BUCKET_NAME = "ecom-citymarket"
+AWS_S3_REGION_NAME = "ap-south-1"
+#AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_S3_FILE_OVERWRITE= False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+AWS_LOCATION = 'static'
+#STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+PUBLIC_MEDIA_LOCATION = 'media'
+DEFAULT_FILE_STORAGE = 'ftpmart.storage_backends.PublicMediaStorage'
+
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
