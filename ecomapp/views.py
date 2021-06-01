@@ -460,6 +460,21 @@ class AdminProductCreateView(AdminRequiredMixin, CreateView):
    #Delivery backend
     
     
+class DeliveryRegistrationView(CreateView):
+    template_name = "Deliveryregistration.html"
+    form_class = DeliveryRegistrationForm
+    success_url = reverse_lazy("ecomapp:DeliveryOrderList")
+    
+    def form_valid(self, form):
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password")
+        email = form.cleaned_data.get("email")
+        user = User.objects.create_user(username,email, password)
+        #Delivery.objects.create_user(user,full_name, mobile)
+        form.instance.user = user
+        login(self.request, user)
+        return super().form_valid(form)
+
 class DeliveryLoginView(FormView):
     template_name = "Deliverylogin.html"
     form_class = CustomerLoginForm
@@ -498,7 +513,7 @@ class Currentdelivery(DeliveryRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         name=self.request.user
-        context["pendingorders"] = Order.objects.filter(agent=name).order_by("-id")
+        context["pendingorders"] = Order.objects.filter(agent=name).exclude(order_status="Order Completed").order_by("-id")
         return context
 
 
@@ -546,3 +561,14 @@ class Deliverymanageview(DeliveryRequiredMixin,View):
         else:
             pass
         return redirect("ecomapp:DeliveryOrderList")
+    
+
+    
+class previousDeliveryOrderView(DeliveryRequiredMixin, TemplateView):
+    template_name = "previousDeliveryOrder.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        name=self.request.user
+        context["completedorders"] = Order.objects.filter(agent=name,order_status="Order Completed" ).order_by("-id")
+        return context
