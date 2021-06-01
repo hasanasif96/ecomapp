@@ -42,7 +42,7 @@ urlpatterns=[
         
         
         
-        
+        path("Delivery-register/", DeliveryRegistrationView.as_view(), name="Deliveryregistration"),
         path("Delivery-login/", DeliveryLoginView.as_view(), name="Deliverylogin"),     
         path("delivery-all-orders/", DeliveryOrderListView.as_view(), name="DeliveryOrderList"),   
         path("delivery-order/<int:pk>/", DeliveryOrderDetailView.as_view(), name="DeliveryOrderDetail"),
@@ -50,6 +50,7 @@ urlpatterns=[
         path("pendingdelivery/", Currentdelivery.as_view(), name="Currentdelivery"),
         path("pending-delivery-order/<int:pk>/", pendingDeliveryOrderDetailView.as_view(), name="pendingDeliveryOrderDetail"),
         path("pending-order-<int:pk>-change/", pendingDeliveryOrderStatuChangeView.as_view(), name="pendingDeliveryOrderStatuChange"),
+        path("previous-order-change/", previousDeliveryOrderView.as_view(), name="previousDeliveryOrder"),
              
 
 
