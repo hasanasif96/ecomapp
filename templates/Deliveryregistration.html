@@ -1,0 +1,24 @@
+{% extends 'deliverybase.html' %}
+
+{% block title %}Delivery Registration{% endblock %}
+
+{% block content %}
+<style>
+    .errorlist{
+        color: red;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <h3>Delivery Registration Form</h3><hr>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-primary">Register as a Delivery Agent</button>
+            </form>
+            <p> Already have an account? <a href="{% url 'ecomapp:Deliverylogin' %}">Login here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
