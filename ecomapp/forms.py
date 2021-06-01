@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from .models import Order, Customer, User,  Product
+from .models import Order, Customer, User,  Product, Delivery
 
 
 class CheckoutForm(forms.ModelForm):
@@ -40,8 +40,25 @@ class CustomerLoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
+class DeliveryRegistrationForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    email = forms.CharField(widget=forms.EmailInput(attrs={'class':'form-control'}))
+    full_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    mobile = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
 
+    class Meta:
+        model = Delivery
+        fields = ["username", "password","email", "full_name", "mobile"]
+        
+   
 
+    def clean_username(self):
+        uname = self.cleaned_data.get("username")
+        if User.objects.filter(username=uname).exists():
+            raise forms.ValidationError(
+                "Delivery Agent with this username already exists.")
+        return uname
         
         
 class ProductForm(forms.ModelForm):
